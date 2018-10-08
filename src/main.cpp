@@ -35,7 +35,7 @@ CTxMemPool mempool;
 unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
-uint256 hashGenesisBlock("0x8ac0be55d62bdbbcd99f849486ec3de60fbd265d1ef9bd418868cc4ce3d8c0ad");
+uint256 hashGenesisBlock("0xa6e8b8510d2a2db8309457f997a3c17bd5e0bf7ee6827c87bc669019fbde2734");
 static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // Summitzcoin: starting difficulty is 1 / 2^12
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
@@ -1087,18 +1087,18 @@ uint256 static GetOrphanRoot(const CBlockHeader* pblock)
 
 int64 static GetBlockValue(int nHeight, int64 nFees)
 {
-    int64 nSubsidy = 16 * COIN; //50 -> 100
+    int64 nSubsidy = 8 * COIN; //50 -> 100
 
     // Subsidy is cut in half every 840000 blocks, which will occur approximately every 4 years
     nSubsidy >>= (nHeight / 1314000); // Summitzcoin: 5 years, BlockHalving
 
     if (nHeight <= 1)
-        return 1957952000 * COIN;
+        return 2978976000 * COIN;
 
     return nSubsidy + nFees;
 }
 
-static const int64 nTargetTimespan = 1 * 24 * 60 * 60; // Summitzcoin: 1 day, BlockDifficulty
+static const int64 nTargetTimespan = 2 * 60; // Summitzcoin: 1 day, BlockDifficulty
 static const int64 nTargetSpacing = 2 * 60; // Summitzcoin: 2 minutes, BlockTime
 static const int64 nInterval = nTargetTimespan / nTargetSpacing;
 
@@ -2745,11 +2745,11 @@ bool LoadBlockIndex()
 {
     if (fTestNet)
     {
-        pchMessageStart[0] = 0xf4; //fc, This is Magic Number.
+        pchMessageStart[0] = 0xf6; //fc, This is Magic Number.
         pchMessageStart[1] = 0xc1; //c1
         pchMessageStart[2] = 0xbd; //b7
         pchMessageStart[3] = 0xd4; //dc
-        hashGenesisBlock = uint256("0x7047dc5abb63e540e5b69d94dc8b8327408b97dc5e620837582d10cb68426ead");
+        hashGenesisBlock = uint256("0xc728da52012f92981bc072e0cbeb54f886c4111401d1a4c260b836ceb9e85dfe");
     }
 
     //
@@ -2787,21 +2787,21 @@ bool InitBlockIndex() {
         txNew.vin.resize(1);
         txNew.vout.resize(1);
         txNew.vin[0].scriptSig = CScript() << 486604799 << CBigNum(4) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
-        txNew.vout[0].nValue = 16 * COIN; ///////////////////////////////////////////////
+        txNew.vout[0].nValue = 8 * COIN; ///////////////////////////////////////////////
         txNew.vout[0].scriptPubKey = CScript() << ParseHex("049c13378bb9d7c4339b595274d23ce29491d447305e2feba5450d29fd85db9520e02ec8cea5132e277689f4b09bfc850cc02851de5cde7c5930b9bdeb010aec18") << OP_CHECKSIG;
         CBlock block;
         block.vtx.push_back(txNew);
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1538024692;
+        block.nTime    = 1538708396;
         block.nBits    = 0x1e0ffff0;
-        block.nNonce   = 2085944041;
+        block.nNonce   = 2086149499;
 
         if (fTestNet)
         {
-            block.nTime    = 1538024673;
-            block.nNonce   = 395737224;
+            block.nTime    = 1538708378;
+            block.nNonce   = 396541655;
         }
 
 	if (false && block.GetHash() != hashGenesisBlock)
@@ -2852,7 +2852,7 @@ bool InitBlockIndex() {
         printf("%s\n", hash.ToString().c_str());
         printf("%s\n", hashGenesisBlock.ToString().c_str());
         printf("%s\n", block.hashMerkleRoot.ToString().c_str());
-        assert(block.hashMerkleRoot == uint256("0xb63ebe9b5c35428a47537cff50afd352541fe4b19938f7a9c29f1b80f41c5fee"));
+        assert(block.hashMerkleRoot == uint256("0x08329c9b3128b4bee1e17df899058b11d8e9eaa1abae0eb2aa5cb9977b9b59d7"));
         block.print();
         assert(hash == hashGenesisBlock);
 
@@ -3125,7 +3125,7 @@ bool static AlreadyHave(const CInv& inv)
 // The message start string is designed to be unlikely to occur in normal data.
 // The characters are rarely used upper ASCII, not valid as UTF-8, and produce
 // a large 4-byte int at any alignment.
-unsigned char pchMessageStart[4] = { 0xf3, 0xc1, 0xb6, 0xda }; // Summitzcoin: increase each by adding 2 to bitcoin's value.
+unsigned char pchMessageStart[4] = { 0xf5, 0xc1, 0xb6, 0xda }; // Summitzcoin: increase each by adding 2 to bitcoin's value.
 
 
 void static ProcessGetData(CNode* pfrom)
